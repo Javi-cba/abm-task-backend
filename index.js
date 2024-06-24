@@ -20,9 +20,8 @@ const port = process.env.PORT;
 // Enable CORS
 const corsOptions = {
   origin: "*",
+  credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
 };
 app.options("", cors(corsOptions));
 app.use(cors(corsOptions));
