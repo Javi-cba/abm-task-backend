@@ -38,7 +38,7 @@ app.use(
 mongoose.connect(process.env.DBUrl);
 
 app.get("/", async (request, response) => {
-  return response.send("Backend reclamos node js express");
+  return response.send("Backend HOME node js express");
 });
 
 // Routers
