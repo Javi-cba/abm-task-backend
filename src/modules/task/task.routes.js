@@ -1,33 +1,43 @@
 const express = require("express");
-const taskService = require("./task.service");
-
 const router = express.Router();
-
-// GET /api/task
-// metodo query - revisar page
-router.get("/api/task", async (req, res) => {
-  // #swagger.tags = ['Task']
-  try {
-    params = req.query
-    // params = req.params.page //revisar
-
-    let paginated = await taskService.paginated(params)
-    return res.status(200).send(paginated);
-
-  } catch (error) {
-    console.log(error)
-    return res.status(500).send(error);
-  }
-});
+const taskService = require("./task.service");
 
 // GET /api/task/:id
 router.get("/api/task/:id", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
-    const userId = req.params.id;
-    const user = await taskService.findOneById(userId);
-    return res.status(200).send(user);
+    const utaskId = req.params.id;
+    const task = await taskService.findOneById(utaskId); //Una sola Tarea
 
+    return res.status(200).send(task);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
+// GET /api/task/user/:id
+router.get("/api/task/user/:idUser", async (req, res) => {
+  // #swagger.tags = ['Task']
+  try {
+    const UserId = req.params.idUser;
+    const tasks = await taskService.findTasksByUser(UserId); //Las tareas de un usuario
+
+    return res.status(200).send(tasks);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
+// GET /api/task
+router.get("/api/task", async (req, res) => {
+  // #swagger.tags = ['Task']
+  try {
+    params = req.query;
+    let paginated = await taskService.paginated(params); //Todas las Tareas
+
+    return res.status(200).send(paginated);
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
@@ -35,25 +45,21 @@ router.get("/api/task/:id", async (req, res) => {
 });
 
 // POST /api/task
-//metodo body 
 router.post("/api/task", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
-    // const newUser = req.body;
+    const { name, description, user, resume } = req.body;
 
-    const { name, description, resume, user } = req.body
-
-    const newUser = {
+    const TaskNw = {
       name,
       description,
+      user,
       resume,
-      user
-    }
-    console.log(newUser);
+    };
 
-    const users = await taskService.save(newUser);
-    return res.status(201).send(users);
+    const taskResp = await taskService.save(TaskNw);
 
+    return res.status(201).send(taskResp);
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
@@ -61,27 +67,15 @@ router.post("/api/task", async (req, res) => {
 });
 
 // PUT /api/task/:id
-// metodo params
 router.put("/api/task/:id", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
-    const userId = req.params.id;
-    // const description = req.params.description;
-    // const resume = req.params.resume;
+    const IdTsk = req.params.id;
 
-    const updatedUser = req.body;
+    const updatedTsk = req.body;
+    const task = await taskService.update(IdTsk, updatedTsk);
 
-    // const { name, description, resume } = req.body
-
-    // const updatedUser = {
-    //   name,
-    //   description,
-    //   resume
-    // }
-
-    const user = await taskService.update(userId, updatedUser);
-    return res.status(200).send(user);
-
+    return res.status(200).send("Task updated successfully.");
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
@@ -92,10 +86,11 @@ router.put("/api/task/:id", async (req, res) => {
 router.delete("/api/task/:id", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
-    const userId = req.params.id;
-    await taskService.remove(userId);
-    return res.status(200).send("Tarea eliminada correctamente.");
+    const IdTsk = req.params.id;
 
+    await taskService.remove(IdTsk);
+
+    return res.status(200).send("Task deleted successfully.");
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
@@ -103,5 +98,3 @@ router.delete("/api/task/:id", async (req, res) => {
 });
 
 module.exports = router;
-
-// description,resume,

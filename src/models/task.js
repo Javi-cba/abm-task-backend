@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 const taskSchema = new mongoose.Schema({
   name: String,
-  description:String,
-  resume:String,
-  user:{ type: Schema.Types.ObjectId, ref: 'User' }
+  description: String,
+  user: { type: Schema.Types.ObjectId, ref: "User" },
+  resume: String,
 });
 
 const taskModel = mongoose.model("Task", taskSchema);
