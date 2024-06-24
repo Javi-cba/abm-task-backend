@@ -18,7 +18,14 @@ const app = express();
 const port = process.env.PORT;
 
 // Enable CORS
-app.use(cors());
+const corsOptions = {
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+app.options("", cors(corsOptions));
+app.use(cors(corsOptions));
 
 // Enable the use of request body parsing middleware
 app.use(bodyParser.json());
