@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 const taskService = require("./task.service");
 
-// GET /api/task/:id
-router.get("/api/task/:id", async (req, res) => {
+// GET /api/task
+router.get("/api/task", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
-    const utaskId = req.params.id;
-    const task = await taskService.findOneById(utaskId); //Una sola Tarea
+    const { taskId } = req.query;
+    const task = await taskService.findOneById(taskId); //Una sola Tarea
 
     return res.status(200).send(task);
   } catch (error) {
@@ -16,12 +16,12 @@ router.get("/api/task/:id", async (req, res) => {
   }
 });
 
-// GET /api/task/user/:id
-router.get("/api/task/user/:idUser", async (req, res) => {
+// GET /api/task/user
+router.get("/api/task/user", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
-    const UserId = req.params.idUser;
-    const tasks = await taskService.findTasksByUser(UserId); //Las tareas de un usuario
+    const { idUser } = req.query;
+    const tasks = await taskService.findTasksByUser(idUser); //Las tareas de un usuario
 
     return res.status(200).send(tasks);
   } catch (error) {
@@ -66,14 +66,14 @@ router.post("/api/task", async (req, res) => {
   }
 });
 
-// PUT /api/task/:id
-router.put("/api/task/:id", async (req, res) => {
+// PUT /api/task
+router.put("/api/task", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
-    const IdTsk = req.params.id;
+    const { taskId } = req.query;
 
     const updatedTsk = req.body;
-    const task = await taskService.update(IdTsk, updatedTsk);
+    await taskService.update(taskId, updatedTsk);
 
     return res.status(200).send("Task updated successfully.");
   } catch (error) {
@@ -82,13 +82,13 @@ router.put("/api/task/:id", async (req, res) => {
   }
 });
 
-// DELETE /api/task/:id
-router.delete("/api/task/:id", async (req, res) => {
+// DELETE /api/task
+router.delete("/api/task", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
-    const IdTsk = req.params.id;
+    const { taskId } = req.query;
 
-    await taskService.remove(IdTsk);
+    await taskService.remove(taskId);
 
     return res.status(200).send("Task deleted successfully.");
   } catch (error) {
