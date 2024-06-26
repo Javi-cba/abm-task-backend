@@ -31,7 +31,7 @@ router.get("/api/task/user", async (req, res) => {
 });
 
 // GET /api/task
-router.get("/api/task", async (req, res) => {
+router.get("/api/tasks", async (req, res) => {
   // #swagger.tags = ['Task']
   try {
     params = req.query;
